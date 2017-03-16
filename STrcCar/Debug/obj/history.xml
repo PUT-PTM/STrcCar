@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m4 -mthumb -Wall -ffunction-sections -g -O0 -c -DSTM32F407VG -DSTM32F4XX -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -IC:\Users\Bartosz\Desktop\STrcCar\cmsis_lib\include -IC:\Users\Bartosz\Desktop\STrcCar\cmsis_boot -IC:\Users\Bartosz\Desktop\STrcCar\cmsis_lib -IC:\Users\Bartosz\Desktop\STrcCar -IC:\Users\Bartosz\Desktop -IC:\Users\Bartosz\Desktop\STrcCar\cmsis">
+      <target file="stm32f4xx_rcc.o" lastModified="15ad7813815">
+         <source file="..\..\..\cmsis_lib\source\stm32f4xx_rcc.c" lastModified="15ad77fd05e"/>
+      </target>
+      <target file="system_stm32f4xx.o" lastModified="15ad78138cc">
+         <source file="..\..\..\cmsis_boot\system_stm32f4xx.c" lastModified="15ad780bca1"/>
+      </target>
+      <target file="stm32f4xx_gpio.o" lastModified="15ad7813872">
+         <source file="..\..\..\cmsis_lib\source\stm32f4xx_gpio.c" lastModified="15ad77fdb20"/>
+      </target>
+      <target file="main.o" lastModified="15ad781379d">
+         <source file="..\..\..\main.c" lastModified="15ad7803d88"/>
+      </target>
+      <target file="startup_stm32f4xx.o" lastModified="15ad7813748">
+         <source file="..\..\..\cmsis_boot\startup\startup_stm32f4xx.c" lastModified="15ad77fd066"/>
+      </target>
+   </processor>
+</history>
