@@ -1,23 +1,4 @@
-# Folders
-**/[Ll]ibrary/
-**/[Tt]emp/
-**/[Oo]bj/
-**/[Bb]in/
-**/[Bb]uild/
-**/[Bb]uilds/
-**/Assets/AssetStoreTools*
-**/[Dd]bug/
-**/.vs/
-**/[Dd]ebug/
-**/[Dd]ebugPublic/
-**/[Rr]elease/
-**/[Rr]eleases/
-**/ipch
-**/logs/
-**/nppBackup/
-*.log
-
-# Object files
+ Object files
 *.o
 *.ko
 *.obj
@@ -49,17 +30,3 @@
 
 # Debug files
 *.dSYM/
-
-# Vagrant
-.vagrant/
-
-# InteliJ
-.idea/
-
-# Temporary files
-*~
-
-# CooCox Builds
-*.cogui
-*.comarker
-*.pbxproj
