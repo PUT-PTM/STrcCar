@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -g -nostartfiles -Map=RCcar.map -O0 --gc-sections -LD:\Programy\CoIDE\configuration\ProgramData\RCcar -TD:\Programy\CoIDE\configuration\ProgramData\RCcar/arm-gcc-link.ld -g">
+      <target file="RCcar.elf" lastModified="15ad7a07365">
+         <source file="..\obj\startup_stm32f4xx.o" lastModified="15ad7a06fe0"/>
+         <source file="..\obj\main.o" lastModified="15ad7a07040"/>
+         <source file="..\obj\stm32f4xx_rcc.o" lastModified="15ad7a070a9"/>
+         <source file="..\obj\stm32f4xx_gpio.o" lastModified="15ad7a0710a"/>
+         <source file="..\obj\system_stm32f4xx.o" lastModified="15ad7a0714c"/>
+      </target>
+   </processor>
+</history>
