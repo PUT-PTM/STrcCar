@@ -30,3 +30,8 @@
 
 # Debug files
 *.dSYM/
+
+# CooCox Builds
+*.cogui
+*.comarker
+*.pbxproj
