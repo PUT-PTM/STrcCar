@@ -4,3 +4,4 @@
 
 # Compile outputs
 RCcar/RCcar/
+*.log
