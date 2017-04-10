@@ -10,9 +10,42 @@
 int i=1;
 int j=0;
 int stan=0;
+
 GPIO_InitTypeDef  GPIO_InitStructure;
 TIM_OCInitTypeDef TIM_OCInitStructure;
+TIM_ICInitTypeDef TIM_ICInitStructure;
+TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+NVIC_InitTypeDef NVIC_InitStructure;
 
+
+
+int obrotR=0;
+int obrotL=0;
+int wartosc=0;
+
+void TIM4_IRQHandler(void)
+		 {
+		              if(TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET)
+		              {
+
+		            	obrotR++;
+		            	TIM_SetCounter(TIM4, 0);
+		            	// wyzerowanie flagi wyzwolonego przerwania
+		                     TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
+		              }
+		 }
+
+void TIM3_IRQHandler(void)
+		 {
+		              if(TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
+		              {
+
+		            	obrotL++;
+		            	TIM_SetCounter(TIM3, 0);
+		            	// wyzerowanie flagi wyzwolonego przerwania
+		                     TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
+		              }
+		 }
 
 void USART3_IRQHandler(void)
 {
@@ -119,6 +152,7 @@ void EXTI0_IRQHandler(void)
 	EXTI_ClearITPendingBit(EXTI_Line0);
 	}
 }
+/*
 void TIM3_IRQHandler(void)
 		 {
 		              if(TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
@@ -140,6 +174,7 @@ void TIM3_IRQHandler(void)
 		                     TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
 		              }
 		 }
+*/
 
 void Init_Buttom()
 {
@@ -273,14 +308,147 @@ void Init_bluetooth()
 
 }
 
+void Init_EncoderR()
+{
+
+
+	   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+	   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+	   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
+	   GPIO_InitTypeDef GPIO_InitStructure;
+	   TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+	   TIM_ICInitTypeDef  TIM_ICInitStructure;
+	   NVIC_InitTypeDef NVIC_InitStructure;
+
+
+
+	    GPIO_PinAFConfig(GPIOB, GPIO_PinSource6, GPIO_AF_TIM4);
+	    GPIO_PinAFConfig(GPIOB, GPIO_PinSource7, GPIO_AF_TIM4);
+	    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 |GPIO_Pin_7;
+	    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	    GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	    TIM_TimeBaseStructure.TIM_Prescaler     = 0;
+	    TIM_TimeBaseStructure.TIM_CounterMode   = TIM_CounterMode_Up;
+	    TIM_TimeBaseStructure.TIM_Period        = 3840;
+	    TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+	    TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+	    TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
+
+	    TIM_ICStructInit(&TIM_ICInitStructure);
+	    TIM_ICInitStructure.TIM_Channel     = TIM_Channel_1;
+	    TIM_ICInitStructure.TIM_ICPolarity  = TIM_ICPolarity_Rising;
+	    TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
+	    TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;
+	    TIM_ICInitStructure.TIM_ICFilter    = 15;
+	    TIM_ICInit(TIM4, &TIM_ICInitStructure);
+
+	    //Initialize input capture structure: Ch2
+	    TIM_ICInitStructure.TIM_Channel     = TIM_Channel_2;
+	    TIM_ICInit(TIM4, &TIM_ICInitStructure);
+
+	    TIM_EncoderInterfaceConfig(TIM4, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);
+
+	   	TIM_SetCounter(TIM4, 0);
+
+			   	TIM_Cmd(TIM4,ENABLE);
+
+
+			   			NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;
+			   					 				 // priorytet g³ówny
+			   			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;
+			   					 				 // subpriorytet
+			   			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;
+			   					 				 // uruchom dany kana³
+			   			NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+			   					 				 // zapisz wype³nion¹ strukturê do rejestrów
+			   			NVIC_Init(&NVIC_InitStructure);
+			   					 				 // wyczyszczenie przerwania od timera 4 (wyst¹pi³o przy konfiguracji timera)
+			   			TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
+			   					 				 // zezwolenie na przerwania od przepe³nienia dla timera 4
+			   			TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);
+
+}
+
+void Init_EncoderL()
+{
+
+
+	   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+	   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+	   GPIO_InitTypeDef GPIO_InitStructure;
+	   TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+	   TIM_ICInitTypeDef  TIM_ICInitStructure;
+	   NVIC_InitTypeDef NVIC_InitStructure;
+
+
+
+	    GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_TIM3);
+	    GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_TIM3);
+	    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 |GPIO_Pin_7;
+	    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	    GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	    TIM_TimeBaseStructure.TIM_Prescaler     = 0;
+	    TIM_TimeBaseStructure.TIM_CounterMode   = TIM_CounterMode_Up;
+	    TIM_TimeBaseStructure.TIM_Period        = 3840;
+	    TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+	    TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+	    TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
+
+	    TIM_ICStructInit(&TIM_ICInitStructure);
+	    TIM_ICInitStructure.TIM_Channel     = TIM_Channel_1;
+	    TIM_ICInitStructure.TIM_ICPolarity  = TIM_ICPolarity_Rising;
+	    TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
+	    TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;
+	    TIM_ICInitStructure.TIM_ICFilter    = 15;
+	    TIM_ICInit(TIM3, &TIM_ICInitStructure);
+
+	    //Initialize input capture structure: Ch2
+	    TIM_ICInitStructure.TIM_Channel     = TIM_Channel_2;
+	    TIM_ICInit(TIM3, &TIM_ICInitStructure);
+
+	    TIM_EncoderInterfaceConfig(TIM3, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);
+
+	   	TIM_SetCounter(TIM3, 0);
+
+			   	TIM_Cmd(TIM3,ENABLE);
+
+
+			   			NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+			   					 				 // priorytet g³ówny
+			   			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;
+			   					 				 // subpriorytet
+			   			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;
+			   					 				 // uruchom dany kana³
+			   			NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+			   					 				 // zapisz wype³nion¹ strukturê do rejestrów
+			   			NVIC_Init(&NVIC_InitStructure);
+			   					 				 // wyczyszczenie przerwania od timera 4 (wyst¹pi³o przy konfiguracji timera)
+			   			TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
+			   					 				 // zezwolenie na przerwania od przepe³nienia dla timera 4
+			   			TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);
+
+}
+
+
 int main(void)
 {
 	SystemInit();
 
-	Init_Time_engine();
-	Init_Engine();
-	Init_Buttom();
-	Init_bluetooth();
+	//Init_Time_engine();
+	//Init_Engine();
+	//Init_Buttom();
+	//Init_bluetooth();
+	Init_EncoderR();
+	Init_EncoderL();
 
 
 
