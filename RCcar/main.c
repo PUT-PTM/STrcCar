@@ -4,18 +4,25 @@
 #include "stm32f4xx_exti.h"
 #include "stm32f4xx_syscfg.h"
 #include "stm32f4xx_usart.h"
+#include "tm_stm32f4_delay.h"
+#include "tm_stm32f4_hcsr04.h"
+#include "stm32f4xx.h"
+#include <stdio.h>
+#include "defines.h"
 #include "misc.h"
 
 
 int i=1;
 int j=0;
 int stan=0;
+int odleglosc;
 
 GPIO_InitTypeDef  GPIO_InitStructure;
 TIM_OCInitTypeDef TIM_OCInitStructure;
 TIM_ICInitTypeDef TIM_ICInitStructure;
 TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 NVIC_InitTypeDef NVIC_InitStructure;
+TM_HCSR04_t HCSR04;
 
 
 
@@ -62,32 +69,70 @@ if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 			GPIO_SetBits(GPIOD, GPIO_Pin_13);
 
+
+
 		}
 		if(a=='w')
 		{
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_13);
 			GPIO_SetBits(GPIOD,GPIO_Pin_14);
+
+
 		}
 		if(a=='d')
 		{
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_14);
+
 		}
 		if(a=='s')
 		{
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_12);
+
+		}
+		if(a=='q')
+		{
+			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+			GPIO_SetBits(GPIOD,GPIO_Pin_13);
+			GPIO_SetBits(GPIOD,GPIO_Pin_14);
+
+		}
+		if(a=='e')
+		{
+			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+			GPIO_SetBits(GPIOD,GPIO_Pin_13);
+			GPIO_SetBits(GPIOD,GPIO_Pin_14);
+
+		}
+		if(a=='z')
+		{
+			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+			GPIO_SetBits(GPIOD,GPIO_Pin_15);
+			GPIO_SetBits(GPIOD,GPIO_Pin_12);
+
+		}
+		if(a=='x')
+		{
+			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+			GPIO_SetBits(GPIOD,GPIO_Pin_15);
 		}
 		if(a=='r')
-				{
-						GPIO_SetBits(GPIOA, GPIO_Pin_3);
-				}
+		{
+			GPIO_SetBits(GPIOA, GPIO_Pin_3);
+		}
 		if(a=='g')
-				{
-						GPIO_ResetBits(GPIOA, GPIO_Pin_3);
-				}
+		{
+			GPIO_ResetBits(GPIOA, GPIO_Pin_3);
+		}
+		if(a=='b')
+		{
+			TIM9->CCR1 = 0;
+		    TIM9->CCR2 = 0;
+
+		}
 
 		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET);
 }
@@ -156,7 +201,7 @@ void Init_Engine()
 			GPIO_SetBits(GPIOD, GPIO_Pin_13 | GPIO_Pin_14);
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12| GPIO_Pin_15);
 }
-/*
+
 void EXTI0_IRQHandler(void)
 {    if(EXTI_GetITStatus(EXTI_Line0) != RESET)
 	{
@@ -262,7 +307,7 @@ void Init_Buttom()
 			 			GPIO_Init(GPIOA, &GPIO_InitStructure);
 
 }
-*/
+
 void Init_bluetooth()
 {
 	// wlaczenie taktowania wybranego portu
@@ -451,7 +496,74 @@ void Init_EncoderL()
 
 }
 
+void Init_Servo(void) {
 
+    // Structures for configuration
+    GPIO_InitTypeDef            GPIO_InitStructure;
+    TIM_TimeBaseInitTypeDef     TIM_TimeBaseStructure;
+    TIM_OCInitTypeDef           TIM_OCInitStructure;
+
+    // TIM4 Clock Enable
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM13, ENABLE);
+
+    // GPIOB Clock Enable
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+
+    // Initalize PB6 (TIM4 Ch1) and PB7 (TIM4 Ch2)
+    GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_6;
+    GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_100MHz;    // GPIO_High_Speed
+    GPIO_InitStructure.GPIO_OType   = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_PuPd    = GPIO_PuPd_UP;         // Weak Pull-up for safety during startup
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+    // Assign Alternate Functions to pins
+    GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_TIM13);
+
+
+
+    // Time Base Configuration
+    TIM_TimeBaseStructure.TIM_Period        = 1999;
+    TIM_TimeBaseStructure.TIM_Prescaler     = 839;
+    TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+    TIM_TimeBaseStructure.TIM_CounterMode   = TIM_CounterMode_Up;
+
+    TIM_TimeBaseInit(TIM13, &TIM_TimeBaseStructure);
+
+    // Common TIM Settings
+    TIM_OCInitStructure.TIM_OCMode      = TIM_OCMode_PWM1;
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+    TIM_OCInitStructure.TIM_Pulse       = 0;                        // Initial duty cycle
+    TIM_OCInitStructure.TIM_OCPolarity  = TIM_OCPolarity_High;
+
+    // Channel 1
+    TIM_OC1Init(TIM13, &TIM_OCInitStructure);
+    TIM_OC1PreloadConfig(TIM13, TIM_OCPreload_Enable);
+
+
+    TIM_ARRPreloadConfig(TIM13, ENABLE);
+
+    // Start timer
+    TIM_Cmd(TIM13, ENABLE);
+}
+
+void Init_HCSR04()
+{
+
+    /* Initialize delay functions */
+	TM_DELAY_Init();
+
+	/* Initialize distance sensor1 on pins; ECHO: PD0, TRIGGER: PC1 */
+	if (!TM_HCSR04_Init(&HCSR04, GPIOD, GPIO_PIN_0, GPIOC, GPIO_PIN_1)) {
+	        /* Sensor is not ready to use */
+	        /* Maybe wiring is incorrect */
+	        while (1) {
+	            //TM_DISCO_LedToggle(LED_RED | LED_GREEN);
+	            Delayms(100);
+	        }
+	    }
+
+}
 
 
 int main(void)
@@ -460,13 +572,14 @@ int main(void)
 
 	Init_Time_engine();
 	Init_Engine();
-
 	Init_bluetooth();
-
-
 	Init_EncoderL();
 	Init_EncoderR();
 	//Init_Buttom();
+	Init_Servo();
+	Init_HCSR04();
+
+
 
 
 
@@ -475,10 +588,13 @@ int main(void)
     {
 
 	//plynne zmienianie
+	  	TIM9->CCR1 = speed;
+		TIM9->CCR2 = speed;
+		TIM13->CCR1 = 140; //55 140 230;
 
-    	TIM9->CCR1 = speed;
-    	TIM9->CCR2 = speed;
-
+		TM_HCSR04_Read(&HCSR04);
+		odleglosc=HCSR04.Distance;
+		Delayms(100);
 
 
 
