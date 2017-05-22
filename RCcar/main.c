@@ -39,13 +39,15 @@ void TIM3_IRQHandler(void)
 
 		            		TM_HCSR04_Read(&HCSR04);
 		            		odleglosc=HCSR04.Distance;
-		            		if(odleglosc<20)
+		            		if(GPIO_ReadInputDataBit(GPIOD,GPIO_Pin_14)==1)
+		            		    	{
+		            					if(odleglosc<20)
 		            								{
 		            									TIM9->CCR1 = 0;
 		            									TIM9->CCR2 = 0;
 
 		            								}
-
+		            		    	}
 
 		                     // wyzerowanie flagi wyzwolonego przerwania
 		                     TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
@@ -91,6 +93,7 @@ if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 		{
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 			GPIO_SetBits(GPIOD, GPIO_Pin_13);
+			GPIO_SetBits(GPIOD,GPIO_Pin_15);
 
 		}
 		if(a=='w')
@@ -104,6 +107,7 @@ if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 		{
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_14);
+			GPIO_SetBits(GPIOD,GPIO_Pin_12);
 
 		}
 		if(a=='s')
@@ -118,6 +122,8 @@ if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_13);
 			GPIO_SetBits(GPIOD,GPIO_Pin_14);
+			TIM9->CCR1 = speed;
+			TIM9->CCR2 = (speed*0.5);
 
 		}
 		if(a=='e')
@@ -125,6 +131,8 @@ if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_13);
 			GPIO_SetBits(GPIOD,GPIO_Pin_14);
+			TIM9->CCR1 = (speed*0.5);
+			TIM9->CCR2 = speed;
 
 		}
 		if(a=='z')
@@ -132,12 +140,16 @@ if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_12);
+			TIM9->CCR1 = speed;
+			TIM9->CCR2 = (speed*0.5);
 
 		}
 		if(a=='x')
 		{
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_15);
+			TIM9->CCR1 = (speed*0.5);
+			TIM9->CCR2 = speed;
 
 		}
 		if(a=='r')
@@ -154,6 +166,7 @@ if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 		    TIM9->CCR2 = 0;
 
 		}
+
 
 		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET);
 }
