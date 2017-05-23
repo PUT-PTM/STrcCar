@@ -123,7 +123,8 @@ if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 			GPIO_SetBits(GPIOD,GPIO_Pin_13);
 			GPIO_SetBits(GPIOD,GPIO_Pin_14);
 			TIM9->CCR1 = speed;
-			TIM9->CCR2 = (speed*0.5);
+		    TIM9->CCR2 = 0;
+
 
 		}
 		if(a=='e')
@@ -131,8 +132,8 @@ if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_13);
 			GPIO_SetBits(GPIOD,GPIO_Pin_14);
-			TIM9->CCR1 = (speed*0.5);
 			TIM9->CCR2 = speed;
+			TIM9->CCR1 = 0;
 
 		}
 		if(a=='z')
@@ -141,15 +142,16 @@ if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 			GPIO_SetBits(GPIOD,GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_12);
 			TIM9->CCR1 = speed;
-			TIM9->CCR2 = (speed*0.5);
+		    TIM9->CCR2 = 0;
+
 
 		}
 		if(a=='x')
 		{
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 			GPIO_SetBits(GPIOD,GPIO_Pin_15);
-			TIM9->CCR1 = (speed*0.5);
 			TIM9->CCR2 = speed;
+			TIM9->CCR1 = 0;
 
 		}
 		if(a=='r')
