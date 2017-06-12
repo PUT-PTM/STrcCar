@@ -4,7 +4,7 @@ This is project for an university. I implemented bluetooth communication between
 Project consists of Android programm that sends data through bluetooth port to the car.
 # Tools 
 CooCox 1.7.8,
-Android Studio
+App Inventor 2
 # How to run 
 You should upload the program to the STM32F4 board and launch the aplication on smartphone.
 # How to compile 
