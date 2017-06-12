@@ -2,7 +2,13 @@
 STrcCar is a project of remote controlled car, that uses sensor and bluetooth comunication to control direction and speed movements. It is built on STM32F407G microprocessor and smartphone application.
 # Description 
 We can remotedly control the car thanks to the application and via Bluetooth connection. We can change speed and driving direction. We have 8 driving direction and hard stop button. The power supply  of STM32 board and engine is from powerbank. 
-##Projects components:
+Projects components:
+- STM32F407G DISCOVERY
+- Pololu TB6612FNG
+- Bluetooth 2.1 XM-15B 
+- HC-SR04
+- 2x engine
+
 # Tools 
 CooCox 1.7.8,
 App Inventor 2
