@@ -1,7 +1,8 @@
 # Overview 
-This is project for an university. I implemented bluetooth communication between the smartphone and remote-controlled car and control of car equipment.
+STrcCar is a project of remote controlled car, that uses sensor and bluetooth comunication to control direction and speed movements. It is built on STM32F407G microprocessor and smartphone application.
 # Description 
-Project consists of Android programm that sends data through bluetooth port to the car.
+We can remotedly control the car thanks to the application and via Bluetooth connection. We can change speed and driving direction. We have 8 driving direction and hard stop button. The power supply  of STM32 board and engine is from powerbank. 
+##Projects components:
 # Tools 
 CooCox 1.7.8,
 App Inventor 2
@@ -16,5 +17,4 @@ MIT
 # Credits 
 Bartosz Tyczyński
 The project was conducted during the Microprocessor Lab course held by the Institute of Control and Information Engineering, Poznan University of Technology.
-# Supervisor: 
-Tomasz Mańkowski
+Supervisor: Tomasz Mańkowski
