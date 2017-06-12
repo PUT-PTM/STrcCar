@@ -3,7 +3,7 @@ STrcCar is a project of remote controlled car, that uses sensor and bluetooth co
 # Description 
 We can remotedly control the car thanks to the application and via Bluetooth connection (USART). We can change speed and driving direction. We have 8 driving direction and hard stop button. The power supply  of STM32 board and engine is from powerbank. 
 </br></br>
-Projects components:</br>
+<b>Projects components:</b></br>
 - STM32F407G DISCOVERY
 - Pololu TB6612FNG
 - Bluetooth 2.1 XM-15B 
@@ -15,7 +15,7 @@ Projects components:</br>
 - App Inventor 2, Scratch
 # How to run 
   Connection: </br>
-- Pololu TB6612FNG </br>
+- <b>Pololu TB6612FNG</b> </br>
   VCC -> VDD </br>
   GND -> GND </br>
   STBY -> PA3 </br>
@@ -31,12 +31,12 @@ Projects components:</br>
   AO2 -> e1 </br>
   BO1 -> e2 </br>
   BO2 -> e2 </br>
-- Bluetooth 2.1 XM-15B </br>
+- <b>Bluetooth 2.1 XM-15B </b></br>
   VCC -> VDD </br>
   GND -> GND </br>
   TXD -> PC10 </br>
   RXD -> PC11 </br>
-- HC-SR04 </br>
+- <b>HC-SR04 </b></br>
   VCC -> 5V </br>
   GND -> GND </br>
   Echo -> PD0 </br>
