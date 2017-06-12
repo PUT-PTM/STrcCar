@@ -14,7 +14,7 @@ We can remotedly control the car thanks to the application and via Bluetooth con
 - CooCox 1.7.8, C </br>
 - App Inventor 2, Scratch
 # How to run 
-  Connection: </br>
+ <b><i> Connection:</i></b> </br>
 - <b>Pololu TB6612FNG</b> </br>
   VCC -> VDD </br>
   GND -> GND </br>
@@ -42,7 +42,7 @@ We can remotedly control the car thanks to the application and via Bluetooth con
   Echo -> PD0 </br>
   Trig -> PC1 </br>
 # How to compile 
-Clone project from repository and compile program and send to your board.
+Clone project from repository, compile program and send to your board.
 # Attributions 
 https://stm32f4-discovery.net/2014/08/library-30-measure-distance-hc-sr04-stm32f4xx/
 # License 
@@ -50,4 +50,4 @@ https://stm32f4-discovery.net/2014/08/library-30-measure-distance-hc-sr04-stm32f
 # Credits 
 Bartosz Tyczyński
 The project was conducted during the Microprocessor Lab course held by the Institute of Control and Information Engineering, Poznan University of Technology.</br>
-Supervisor: Tomasz Mańkowski
+<b>Supervisor:</b> Tomasz Mańkowski
