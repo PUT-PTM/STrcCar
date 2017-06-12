@@ -29,7 +29,7 @@ TM_HCSR04_t HCSR04;
 int obrotR=0;
 int obrotL=0;
 int wartosc=0;
-int speed;
+float speed;
 
 
 void TIM3_IRQHandler(void)
@@ -86,93 +86,76 @@ if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 // odebrany bajt znajduje sie w rejestrze USART3->DR
 		while(USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET);
 		char a=USART3->DR;
-		speed = (a-'0');
-		TIM9->CCR1 = speed;
-		TIM9->CCR2 = speed;
-		if(a=='a')
-		{
-			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
-			GPIO_SetBits(GPIOD, GPIO_Pin_13);
-			GPIO_SetBits(GPIOD,GPIO_Pin_15);
 
-		}
-		if(a=='w')
-		{
-			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
-			GPIO_SetBits(GPIOD,GPIO_Pin_13);
-			GPIO_SetBits(GPIOD,GPIO_Pin_14);
-
-		}
-		if(a=='d')
-		{
-			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
-			GPIO_SetBits(GPIOD,GPIO_Pin_14);
-			GPIO_SetBits(GPIOD,GPIO_Pin_12);
-
-		}
-		if(a=='s')
-		{
-			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
-			GPIO_SetBits(GPIOD,GPIO_Pin_15);
-			GPIO_SetBits(GPIOD,GPIO_Pin_12);
-
-		}
-		if(a=='q')
-		{
-			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
-			GPIO_SetBits(GPIOD,GPIO_Pin_13);
-			GPIO_SetBits(GPIOD,GPIO_Pin_14);
-			TIM9->CCR1 = speed;
-		    TIM9->CCR2 = 0;
-
-
-		}
-		if(a=='e')
-		{
-			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
-			GPIO_SetBits(GPIOD,GPIO_Pin_13);
-			GPIO_SetBits(GPIOD,GPIO_Pin_14);
-			TIM9->CCR2 = speed;
-			TIM9->CCR1 = 0;
-
-		}
-		if(a=='z')
-		{
-			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
-			GPIO_SetBits(GPIOD,GPIO_Pin_15);
-			GPIO_SetBits(GPIOD,GPIO_Pin_12);
-			TIM9->CCR1 = speed;
-		    TIM9->CCR2 = 0;
-
-
-		}
-		if(a=='x')
-		{
-			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
-			GPIO_SetBits(GPIOD,GPIO_Pin_15);
-			TIM9->CCR2 = speed;
-			TIM9->CCR1 = 0;
-
-		}
-		if(a=='r')
-		{
-			GPIO_SetBits(GPIOA, GPIO_Pin_3);
-		}
-		if(a=='g')
-		{
-			GPIO_ResetBits(GPIOA, GPIO_Pin_3);
-		}
-		if(a=='b')
-		{
-			TIM9->CCR1 = 0;
-		    TIM9->CCR2 = 0;
-
-		}
-
-
+		switch( a )
+		    {
+		    case 'a':
+		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+		    				GPIO_SetBits(GPIOD, GPIO_Pin_13);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_15);
+		        break;
+		    case 'w':
+		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_13);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_14);
+		        break;
+		    case 'd':
+		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_14);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_12);
+		        break;
+		    case 's':
+		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_15);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_12);
+		   		break;
+		    case 'q':
+		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_13);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_14);
+		    				TIM9->CCR1 = speed;
+		    			    TIM9->CCR2 = 0;
+		  		break;
+		    case 'e':
+		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_13);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_14);
+		    				TIM9->CCR2 = speed;
+		    				TIM9->CCR1 = 0;
+		    	break;
+		    case 'z':
+		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_15);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_12);
+		    				TIM9->CCR1 = speed;
+		    			    TIM9->CCR2 = 0;
+		    	break;
+		    case 'x':
+		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+		    				GPIO_SetBits(GPIOD,GPIO_Pin_15);
+		    				TIM9->CCR2 = speed;
+		    				TIM9->CCR1 = 0;
+		   		break;
+		    case 'r':
+		    	GPIO_SetBits(GPIOA, GPIO_Pin_3);
+		    	break;
+		    case 'g':
+		    	GPIO_ResetBits(GPIOA, GPIO_Pin_3);
+		  		break;
+		    case 'b':
+		    	TIM9->CCR1 = 0;
+		    	TIM9->CCR2 = 0;
+		   		break;
+		    default:
+		    	speed = (a-'0');
+		    	TIM9->CCR1 = speed;
+		    	TIM9->CCR2 = speed;
+		        break;
+		    }
 		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET);
 }
 }
+
 
 void Init_Time_engine()
 {
@@ -237,113 +220,7 @@ void Init_Engine()
 			GPIO_SetBits(GPIOD, GPIO_Pin_13 | GPIO_Pin_14);
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12| GPIO_Pin_15);
 }
-/*
-void EXTI0_IRQHandler(void)
-{    if(EXTI_GetITStatus(EXTI_Line0) != RESET)
-	{
-	TIM_Cmd(TIM3, ENABLE);
-	EXTI_ClearITPendingBit(EXTI_Line0);
-	}
-}
 
-
-void TIM3_IRQHandler(void)
-		 {
-		              if(TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
-		              {
-
-						 if(stan){
-
-							 GPIO_ResetBits(GPIOA, GPIO_Pin_3);
-							 stan=0;
-						 }
-						 else {
-							 GPIO_SetBits(GPIOA, GPIO_Pin_3);
-							 stan=1;
-						}
-
-		            	  TIM_Cmd(TIM3, DISABLE);
-		            	  TIM_SetCounter(TIM3, 0);
-		                     // wyzerowanie flagi wyzwolonego przerwania
-		                     TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
-		              }
-		 }
-
-
-void Init_Buttom()
-{
-	    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
-		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-		RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
-		TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-
-		TIM_TimeBaseStructure.TIM_Period = 1999;
-		TIM_TimeBaseStructure.TIM_Prescaler = 8399;
-		TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;       //2Hz
-		TIM_TimeBaseStructure.TIM_CounterMode =  TIM_CounterMode_Up;
-		TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
-
-		NVIC_InitTypeDef NVIC_InitStructure;
-		NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
-				 				 // priorytet g³ówny
-		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;
-				 				 // subpriorytet
-		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;
-				 				 // uruchom dany kana³
-		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-				 				 // zapisz wype³nion¹ strukturê do rejestrów
-		NVIC_Init(&NVIC_InitStructure);
-				 				 // wyczyszczenie przerwania od timera 4 (wyst¹pi³o przy konfiguracji timera)
-		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
-				 				 // zezwolenie na przerwania od przepe³nienia dla timera 4
-		TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);
-
-		GPIO_InitTypeDef  GPIO_InitStructure;
-		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
-		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;		//plytka
-		GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-
-
-			// numer przerwania
-			NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn;
-			// priorytet g³ówny
-			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;
-			// subpriorytet
-			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;
-			// uruchom dany kana³
-			NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-			// zapisz wype³nion¹ strukturê do rejestrów
-			NVIC_Init(&NVIC_InitStructure);
-
-
-			 EXTI_InitTypeDef EXTI_InitStructure;
-			 // wybór numeru aktualnie konfigurowanej linii przerwañ
-			 EXTI_InitStructure.EXTI_Line = EXTI_Line0;
-			 // wybór trybu - przerwanie b¹dŸ zdarzenie
-			 EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-			 // wybór zbocza, na które zareaguje przerwanie
-			 EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
-			 // uruchom dan¹ liniê przerwañ
-			 EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-			 // zapisz strukturê konfiguracyjn¹ przerwañ zewnêtrznych do rejestrów
-			 EXTI_Init(&EXTI_InitStructure);
-
-
-			 SYSCFG_EXTILineConfig(GPIOA, EXTI_PinSource0);
-
-
-			 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
-			 			GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-			 			GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-			 			GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-			 			GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-			 			GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-}
-*/
 void Init_bluetooth()
 {
 	// wlaczenie taktowania wybranego portu
@@ -648,7 +525,6 @@ int main(void)
 	Init_bluetooth();
 	Init_EncoderL();
 	Init_EncoderR();
-	//Init_Buttom();
 	Init_Servo();
 	Init_HCSR04();
 
@@ -659,12 +535,6 @@ int main(void)
 
     while(1)
     {
-		//TIM13->CCR1 = 140; //55 140 230;
-		//TM_HCSR04_Read(&HCSR04);
-		//odleglosc=HCSR04.Distance;
-		//Delayms(100);
-
-
 
     }
 }
