@@ -48,6 +48,6 @@ https://stm32f4-discovery.net/2014/08/library-30-measure-distance-hc-sr04-stm32f
 # License 
 <a href="License">MIT</a> License
 # Credits 
-Bartosz Tyczyński
+Bartosz Tyczyński</br>
 The project was conducted during the Microprocessor Lab course held by the Institute of Control and Information Engineering, Poznan University of Technology.</br>
 <b>Supervisor:</b> Tomasz Mańkowski
