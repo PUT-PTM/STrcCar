@@ -93,21 +93,29 @@ if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 		    				GPIO_SetBits(GPIOD, GPIO_Pin_13);
 		    				GPIO_SetBits(GPIOD,GPIO_Pin_15);
+		    				TIM9->CCR1 = speed;
+		    				TIM9->CCR2 = speed;
 		        break;
 		    case 'w':
 		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 		    				GPIO_SetBits(GPIOD,GPIO_Pin_13);
 		    				GPIO_SetBits(GPIOD,GPIO_Pin_14);
+		    				TIM9->CCR1 = speed;
+		    				TIM9->CCR2 = speed;
 		        break;
 		    case 'd':
 		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 		    				GPIO_SetBits(GPIOD,GPIO_Pin_14);
 		    				GPIO_SetBits(GPIOD,GPIO_Pin_12);
+		    				TIM9->CCR1 = speed;
+		    				TIM9->CCR2 = speed;
 		        break;
 		    case 's':
 		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
 		    				GPIO_SetBits(GPIOD,GPIO_Pin_15);
 		    				GPIO_SetBits(GPIOD,GPIO_Pin_12);
+		    				TIM9->CCR1 = speed;
+		    				TIM9->CCR2 = speed;
 		   		break;
 		    case 'q':
 		    	GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
@@ -467,7 +475,7 @@ void Init_HCSR04()
 	TM_DELAY_Init();
 
 	/* Initialize distance sensor1 on pins; ECHO: PD0, TRIGGER: PC1 */
-	TM_HCSR04_Init(&HCSR04, GPIOD, GPIO_PIN_0, GPIOC, GPIO_PIN_1)) 
+	TM_HCSR04_Init(&HCSR04, GPIOD, GPIO_PIN_0, GPIOC, GPIO_PIN_1);
 	
 
 	 NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
