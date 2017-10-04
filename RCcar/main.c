@@ -49,7 +49,7 @@ void TIM3_IRQHandler(void)
 		            								}
 		            		    	}
 
-		                     // wyzerowanie flagi wyzwolonego przerwania
+		                 
 		                     TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
 		              }
 		 }
@@ -61,7 +61,7 @@ void TIM5_IRQHandler(void)
 
 		            	obrotL++;
 		            	TIM_SetCounter(TIM5, 0);
-		            	// wyzerowanie flagi wyzwolonego przerwania
+		            
 		                     TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
 		              }
 		 }
@@ -73,17 +73,16 @@ void TIM4_IRQHandler(void)
 
 		            	obrotR++;
 		            	TIM_SetCounter(TIM4, 0);
-		            	// wyzerowanie flagi wyzwolonego przerwania
+		            
 		                     TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 		              }
 		 }
 
 void USART3_IRQHandler(void)
 {
-// sprawdzenie flagi zwiazanej z odebraniem danych przez USART
+
 if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 {
-// odebrany bajt znajduje sie w rejestrze USART3->DR
 		while(USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET);
 		char a=USART3->DR;
 
@@ -172,8 +171,8 @@ void Init_Time_engine()
 		TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
 			GPIO_ResetBits(GPIOA, GPIO_Pin_3);
-		   	TIM_TimeBaseStructure.TIM_Period = 10; //plynne zmienianie 999
-			TIM_TimeBaseStructure.TIM_Prescaler = 167; //plynne zmienianie 839
+		   	TIM_TimeBaseStructure.TIM_Period = 10; 
+			TIM_TimeBaseStructure.TIM_Prescaler = 167; 
 			TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 			TIM_TimeBaseStructure.TIM_CounterMode =  TIM_CounterMode_Up;
 			TIM_TimeBaseInit(TIM9, &TIM_TimeBaseStructure);
@@ -231,14 +230,14 @@ void Init_Engine()
 
 void Init_bluetooth()
 {
-	// wlaczenie taktowania wybranego portu
+
 		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-		// wlaczenie taktowania wybranego uk³adu USART
+	
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
 
 
 
-		// konfiguracja linii Rx i Tx
+	
 		GPIO_InitTypeDef GPIO_InitStructure;
 		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
@@ -246,7 +245,7 @@ void Init_bluetooth()
 		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 		GPIO_Init(GPIOC, &GPIO_InitStructure);
-		// ustawienie funkcji alternatywnej dla pinów (USART)
+		
 		GPIO_PinAFConfig(GPIOC, GPIO_PinSource10, GPIO_AF_USART3);
 		GPIO_PinAFConfig(GPIOC, GPIO_PinSource11, GPIO_AF_USART3);
 
@@ -254,35 +253,35 @@ void Init_bluetooth()
 
 		USART_InitTypeDef USART_InitStructure;
 
-		// predkosc transmisji (mozliwe standardowe opcje: 9600, 19200, 38400, 57600, 115200, ...)
+	
 		USART_InitStructure.USART_BaudRate = 9600;
-		// d³ugoœæ s³owa (USART_WordLength_8b lub USART_WordLength_9b)
+		
 		USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-		// liczba bitów stopu (USART_StopBits_1, USART_StopBits_0_5, USART_StopBits_2, USART_StopBits_1_5)
+		
 		USART_InitStructure.USART_StopBits = USART_StopBits_1;
-		// sprawdzanie parzystoœci (USART_Parity_No, USART_Parity_Even, USART_Parity_Odd)
+	
 		USART_InitStructure.USART_Parity = USART_Parity_No;
-		// sprzêtowa kontrola przep³ywu (USART_HardwareFlowControl_None, USART_HardwareFlowControl_RTS, USART_HardwareFlowControl_CTS, USART_HardwareFlowControl_RTS_CTS)
+	
 		USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-		// tryb nadawania/odbierania (USART_Mode_Rx, USART_Mode_Rx )
+		
 		USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 
-		// konfiguracja
+		
 		USART_Init(USART3, &USART_InitStructure);
 
-		// wlaczenie ukladu USART
+		
 		USART_Cmd(USART3, ENABLE);
 
 		NVIC_InitTypeDef NVIC_InitStructure;
-		// wlaczenie przerwania zwi¹zanego z odebraniem danych (pozostale zrodla przerwan zdefiniowane sa w pliku stm32f4xx_usart.h)
+		
 		USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
 		NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
 		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-		// konfiguracja kontrolera przerwan
+		
 		NVIC_Init(&NVIC_InitStructure);
-		// wlaczenie przerwan od ukladu USART
+	
 		NVIC_EnableIRQ(USART3_IRQn);
 
 }
@@ -325,7 +324,7 @@ void Init_EncoderR()
 	    TIM_ICInitStructure.TIM_ICFilter    = 15;
 	    TIM_ICInit(TIM5, &TIM_ICInitStructure);
 
-	    //Initialize input capture structure: Ch2
+	
 	    TIM_ICInitStructure.TIM_Channel     = TIM_Channel_2;
 	    TIM_ICInit(TIM5, &TIM_ICInitStructure);
 
@@ -337,17 +336,12 @@ void Init_EncoderR()
 
 
 			   			NVIC_InitStructure.NVIC_IRQChannel = TIM5_IRQn;
-			   					 				 // priorytet g³ówny
+			   					 				
 			   			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;
-			   					 				 // subpriorytet
 			   			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;
-			   					 				 // uruchom dany kana³
 			   			NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-			   					 				 // zapisz wype³nion¹ strukturê do rejestrów
 			   			NVIC_Init(&NVIC_InitStructure);
-			   					 				 // wyczyszczenie przerwania od timera 4 (wyst¹pi³o przy konfiguracji timera)
 			   			TIM_ClearITPendingBit(TIM5, TIM_IT_Update);
-			   					 				 // zezwolenie na przerwania od przepe³nienia dla timera 4
 			   			TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE);
 
 }
@@ -390,7 +384,6 @@ void Init_EncoderL()
 		    TIM_ICInitStructure.TIM_ICFilter    = 15;
 		    TIM_ICInit(TIM4, &TIM_ICInitStructure);
 
-		    //Initialize input capture structure: Ch2
 		    TIM_ICInitStructure.TIM_Channel     = TIM_Channel_2;
 		    TIM_ICInit(TIM4, &TIM_ICInitStructure);
 
@@ -402,48 +395,37 @@ void Init_EncoderL()
 
 
 				   			NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;
-				   					 				 // priorytet g³ówny
 				   			NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;
-				   					 				 // subpriorytet
 				   			NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;
-				   					 				 // uruchom dany kana³
 				   			NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-				   					 				 // zapisz wype³nion¹ strukturê do rejestrów
 				   			NVIC_Init(&NVIC_InitStructure);
-				   					 				 // wyczyszczenie przerwania od timera 4 (wyst¹pi³o przy konfiguracji timera)
 				   			TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
-				   					 				 // zezwolenie na przerwania od przepe³nienia dla timera 4
 				   			TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);
 
 }
 
 void Init_Servo(void) {
 
-    // Structures for configuration
     GPIO_InitTypeDef            GPIO_InitStructure;
     TIM_TimeBaseInitTypeDef     TIM_TimeBaseStructure;
     TIM_OCInitTypeDef           TIM_OCInitStructure;
 
-    // TIM4 Clock Enable
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM13, ENABLE);
 
-    // GPIOB Clock Enable
+
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 
-    // Initalize PB6 (TIM4 Ch1) and PB7 (TIM4 Ch2)
     GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_6;
     GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_AF;
-    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_100MHz;    // GPIO_High_Speed
+    GPIO_InitStructure.GPIO_Speed   = GPIO_Speed_100MHz;   
     GPIO_InitStructure.GPIO_OType   = GPIO_OType_PP;
-    GPIO_InitStructure.GPIO_PuPd    = GPIO_PuPd_UP;         // Weak Pull-up for safety during startup
+    GPIO_InitStructure.GPIO_PuPd    = GPIO_PuPd_UP;         
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-    // Assign Alternate Functions to pins
     GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_TIM13);
 
 
 
-    // Time Base Configuration
     TIM_TimeBaseStructure.TIM_Period        = 1999;
     TIM_TimeBaseStructure.TIM_Prescaler     = 839;
     TIM_TimeBaseStructure.TIM_ClockDivision = 0;
@@ -451,30 +433,29 @@ void Init_Servo(void) {
 
     TIM_TimeBaseInit(TIM13, &TIM_TimeBaseStructure);
 
-    // Common TIM Settings
     TIM_OCInitStructure.TIM_OCMode      = TIM_OCMode_PWM1;
     TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-    TIM_OCInitStructure.TIM_Pulse       = 0;                        // Initial duty cycle
+    TIM_OCInitStructure.TIM_Pulse       = 0;                       
     TIM_OCInitStructure.TIM_OCPolarity  = TIM_OCPolarity_High;
 
-    // Channel 1
+
     TIM_OC1Init(TIM13, &TIM_OCInitStructure);
     TIM_OC1PreloadConfig(TIM13, TIM_OCPreload_Enable);
 
 
     TIM_ARRPreloadConfig(TIM13, ENABLE);
 
-    // Start timer
+
     TIM_Cmd(TIM13, ENABLE);
 }
 
 void Init_HCSR04()
 {
 
-    /* Initialize delay functions */
+
 	TM_DELAY_Init();
 
-	/* Initialize distance sensor1 on pins; ECHO: PD0, TRIGGER: PC1 */
+
 	TM_HCSR04_Init(&HCSR04, GPIOD, GPIO_PIN_0, GPIOC, GPIO_PIN_1);
 	
 
@@ -487,7 +468,7 @@ void Init_HCSR04()
 			TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 			TIM_TimeBaseStructure.TIM_Period = 999;
 				TIM_TimeBaseStructure.TIM_Prescaler = 8399;
-				TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;       //2Hz
+				TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;      
 				TIM_TimeBaseStructure.TIM_CounterMode =  TIM_CounterMode_Up;
 				TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
 
@@ -496,21 +477,21 @@ void Init_HCSR04()
 
 
 				 NVIC_InitTypeDef NVIC_InitStructure;
-				 // numer przerwania
+				
 				 NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
-				 // priorytet g³ówny
+				
 				 NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;
-				 // subpriorytet
+				
 				 NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;
-				 // uruchom dany kana³
+				
 				 NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-				 // zapisz wype³nion¹ strukturê do rejestrów
+				
 				 NVIC_Init(&NVIC_InitStructure);
 
 
-				 // wyczyszczenie przerwania od timera 3 (wyst¹pi³o przy konfiguracji timera)
+			
 				 TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
-				 // zezwolenie na przerwania od przepe³nienia dla timera 3
+				
 				 TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);
 
 
